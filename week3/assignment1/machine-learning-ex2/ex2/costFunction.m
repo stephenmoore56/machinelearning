@@ -22,14 +22,10 @@ grad = zeros(size(theta));
 
 % cost function
 hypothesis = theta' * X;
-J = (1 / m) * sum((-1 * y * log(sigmoid(hypothesis))) - ((1 - y) * log(1 - sigmoid(hypothesis))));
+J = (1 / m) * sum((-1 * y * log(sigmoid(hypothesis))) .- ((1 .- y) * log(1 .- sigmoid(hypothesis))));
 
 % gradient
-grad = (1 / m) * ((sigmoid(hypothesis) .- y) * X');
-display('grad is ');
-grad
-
-
+grad = (1 / m) * sum(((sigmoid(hypothesis) .- y) * X'))';
 
 % =============================================================
 
