@@ -16,8 +16,8 @@ p = zeros(m, 1);
 %
 
 
-
-
+% comparison will return vector of boolean 0's and 1's
+p = (sigmoid(X * theta) >= 0.5);
 
 
 

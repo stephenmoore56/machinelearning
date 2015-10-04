@@ -21,11 +21,11 @@ grad = zeros(size(theta));
 %
 
 % cost function
-hypothesis = theta' * X;
-J = (1 / m) * sum((-1 * y * log(sigmoid(hypothesis))) .- ((1 .- y) * log(1 .- sigmoid(hypothesis))));
+z = sigmoid(X * theta);
+J = (-1 / m) * sum(y .* log(z) + (1 - y) .* log(1 - z));
 
 % gradient
-grad = (1 / m) * sum(((sigmoid(hypothesis) .- y) * X'))';
+grad = (1 / m) * ((z - y)' * X)';
 
 % =============================================================
 
