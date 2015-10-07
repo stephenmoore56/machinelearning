@@ -13,7 +13,22 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-J = (1 / (2 * m)) * sum(((theta' * X')' - y) .^ 2);
+% abbreviated / simplified form of cost function
+% note that (theta' * X')' = ((X * theta)')' = X * theta
+% theorem says (A' * B') = (BA)'
+% J = sum(((X * theta) - y) .^ 2) / (2 * m);
+J = ((X * theta) - y)' * ((X * theta) - y) / (2 * m);
+
+% another way of thinking about it, more traditional statistical
+% approach
+yhat = X * theta; % yhat is vector of predicted values
+errors = yhat .- y; % predicted minus actual values of response variable
+sumSquaredErrors = errors' * errors; % sum() not necessary this way
+meanSquaredError = sumSquaredErrors / (2 * m); % not sure why 2m
+% J = meanSquaredError;
+
+% more verbose form
+% J = (1 / (2 * m)) * sum(((theta' * X')' - y) .^ 2);
 
 
 

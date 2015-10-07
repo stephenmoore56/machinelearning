@@ -18,7 +18,8 @@ for iter = 1:num_iters
     %
 
 
-    theta = theta - alpha * (1/m) * (((theta' * X')' - y)' * X)';
+    % theta = theta - alpha * (1/m) * (((theta' * X')' - y)' * X)';
+    theta = theta - (alpha / m) * (((X * theta) - y)' * X)';
 
     % debugging statements
     % computeCost(X, y, theta)

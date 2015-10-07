@@ -19,7 +19,9 @@ for iter = 1:num_iters
 
 
     % same as gradient descent for univariate case
-    theta = theta - alpha * (1/m) * (((theta' * X')' - y)' * X)';
+    % theta = theta - alpha * (1/m) * (((theta' * X')' - y)' * X)';
+    theta = theta - (alpha / m) * (((X * theta) - y)' * X)';
+
 
 
 

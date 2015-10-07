@@ -13,7 +13,17 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-J = (1 / (2 * m)) * ((X * theta) - y)' * ((X * theta) - y);
+% more traditional statistical approach
+yhat = X * theta; % vector of predicted values
+errors = yhat .- y;
+sumSquaredErrors = errors' * errors;
+J = sumSquaredErrors / (2 * m); % mean squared error
+
+% another compact way of expressing it
+% J = (((X * theta) .- y)' * ((X * theta) .- y)) ./ (2 * m);
+
+% most verbose way of expressing it
+% J = (1 / (2 * m)) * ((X * theta) - y)' * ((X * theta) - y);
 
 
 
