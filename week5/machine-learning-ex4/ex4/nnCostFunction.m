@@ -70,6 +70,7 @@ z2 = Theta1 * a1;
 a2 = [ones(1, m); sigmoid(z2)];
 a3 = sigmoid(Theta2 * a2);
 
+% Part 2
 % recode Y as a num_labels x m matrix of column vectors
 % in each column set row to 1 that corresponds to y value
 Y = zeros(num_labels, m);
