@@ -61,77 +61,44 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-% see nnCostFunctionVectorized.m for a completely vectorized implementation; much faster
+
+% see https://github.com/emersonmoretto/mlclass-ex4/blob/master/nnCostFunction.m
 
 % Part 1 - forward propagation
-% hidden layer; add bias units
-X = [ones(m,1) X];
-a2 = sigmoid(Theta1 * X');
-% output layer; add bias units
-a2 = [ones(m,1) a2'];
-a3 = sigmoid(Theta2 * a2');
+a1 = [ones(1, m); X'];
+z2 = Theta1 * a1;
+a2 = [ones(1, m); sigmoid(z2)];
+a3 = sigmoid(Theta2 * a2);
 
-% recode the labels as vectors containing only values 0 or 1 (page 5 of ex4.pdf)
-Y = zeros(num_labels, m); 
-for i=1:m,
-  Y(y(i),i)=1;
+% Part 2
+% recode Y as a num_labels x m matrix of column vectors
+% in each column set row to 1 that corresponds to y value
+Y = zeros(num_labels, m);
+for i = 1:m,
+  Y(y(i),i) = 1;
 endfor
 
-% follow the form
-J = (1/m) * sum(sum((-Y) .* log(a3) - (1 - Y) .* log(1 - a3)));
+% the cost function for the neural network (without regularization) is
+J = (1/m) * sum(sum(-Y .* log(a3) - (1 - Y) .* log(1 - a3)));
+
+% Add regularization term; omit parameter for bias unit from Theta's;
+% Theta1(:, 2:end) means all rows, columns 2 thru end
+J = J + (lambda / (2*m)) * sum(sum(Theta1(:, 2:end) .^ 2));
+J = J + (lambda / (2*m)) * sum(sum(Theta2(:, 2:end) .^ 2));
 
 
+% Part 2 - back propagation; change to for loop
+d3 = a3 - Y; % errors
+d2 = (Theta2' * d3) .* [ones(1, m); sigmoidGradient(z2)];
 
-% Note that you should not be regularizing the terms that correspond to the bias. 
-% For the matrices Theta1 and Theta2, this corresponds to the first column of each matrix.
-t1 = Theta1(:,2:size(Theta1,2));
-t2 = Theta2(:,2:size(Theta2,2));
+Theta2_grad = (1/m) * d3 * a2';
+Theta1_grad = (1/m) * d2(2:end, :) * a1';
 
-% regularization formula
-Reg = (lambda / (2 * m)) * (sum(sum(t1 .^ 2)) + sum(sum(t2 .^ 2)));
+% Add gradient regularization
+Theta2_grad = Theta2_grad + (lambda / m) * ([zeros(size(Theta2, 1), 1), Theta2(:, 2:end)]);
+Theta1_grad = Theta1_grad + (lambda / m) * ([zeros(size(Theta1, 1), 1), Theta1(:, 2:end)]);
 
-% cost function + reg
-J = J + Reg;
-
-% Backprop
-for t=1:m,
-
-	a1 = X(t,:); % X already have bias
-	z2 = Theta1 * a1';
-
-	a2 = sigmoid(z2);
-	a2 = [1 ; a2]; % add bias
-
-	z3 = Theta2 * a2;
-
-	a3 = sigmoid(z3); % final activation layer a3 == h(theta)
-
-	
-	% back propag (god bless me)	
-	
-	z2=[1; z2]; % bias
-
-	delta_3 = a3 - Y(:,t);
-	delta_2 = (Theta2' * delta_3) .* sigmoidGradient(z2);
-
-	% skipping sigma2(0) 
-	delta_2 = delta_2(2:end); 
-
-	Theta2_grad = Theta2_grad + delta_3 * a2';
-	Theta1_grad = Theta1_grad + delta_2 * a1; % I don't know why a1 doesn't need to be transpost (brute force try)
-
-end;
-
-% Regularization
-Theta1_grad(:, 1) = Theta1_grad(:, 1) ./ m;
-Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) ./ m + ((lambda/m) * Theta1(:, 2:end));
-	
-Theta2_grad(:, 1) = Theta2_grad(:, 1) ./ m;
-Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) ./ m + ((lambda/m) * Theta2(:, 2:end));
-
-% =========================================================================
-
-% Unroll gradients
+% Unroll gradients.
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
