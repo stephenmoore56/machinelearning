@@ -15,7 +15,13 @@ X_poly = zeros(numel(X), p);
 %
 % 
 
+% non-vectorized implememtation
+% for i=1:p
+%   X_poly(:,i) = X(:,1).^i;
+% end
 
+% vectorized; wierd, huh?
+X_poly = X .^ [1:p];
 
 
 

@@ -39,7 +39,22 @@ error_val = zeros(length(lambda_vec), 1);
 %
 %
 
+for i=1:length(lambda_vec)
 
+   % obtain theta using lambda_vec(i)
+   theta = trainLinearReg(X,y,lambda_vec(i));
+   
+   % obtain training error / grad using theta and lambda of 0
+   [Jtrain,gradtrain] = linearRegCostFunction(X,y,theta,0);
+   
+   % obtain cross-validation error / grad
+   [Jval,gradval]     = linearRegCostFunction(Xval,yval,theta,0); 
+   
+   % add training and cross-validation error to arrays
+   error_train(i) = Jtrain;
+   error_val(i) = Jval;  
+   
+end
 
 
 
