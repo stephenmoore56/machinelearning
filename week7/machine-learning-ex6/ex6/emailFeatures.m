@@ -48,8 +48,8 @@ x = zeros(n, 1);
 %
 %
 
-
-
+% nice vectorized solution!
+x(word_indices) = 1;
 
 
 

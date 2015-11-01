@@ -18,7 +18,8 @@ end
 
 % Plot the SVM boundary
 hold on
-contour(X1, X2, vals, [0 0], 'Color', 'b');
+contour(X1, X2, vals, [1 1], 'b');
+% this line has a bug per course forum - contour(X1, X2, vals, [0 0], 'Color', 'b');
 hold off;
 
 end
